@@ -124,17 +124,21 @@ for (const asset of ['style.css', 'app.js', 'favicon.svg']) fs.copyFileSync(path
 fs.copyFileSync(path.join(root, 'node_modules/katex/dist/katex.min.css'), path.join(output, 'katex.min.css'))
 fs.cpSync(path.join(root, 'node_modules/katex/dist/fonts'), path.join(output, 'fonts'), { recursive: true })
 fs.writeFileSync(path.join(output, '.nojekyll'), '')
-const home = renderHome({ base, notes, categories, noteUrl, escapeHtml })
+function renderNote(note) {
+  const body = note.body.replace(/^#\s+[^\n]+\n+/, '')
+  const env = { note, headings: [], headingIndex: 0 }
+  return { html: md.render(expandWiki(body, note), env), headings: env.headings }
+}
+const featured = notes.length ? renderNote(notes[0]) : { html: '', headings: [] }
+const home = renderHome({ base, notes, categories, noteUrl, escapeHtml, featuredHtml: featured.html, featuredHeadings: featured.headings })
 fs.writeFileSync(path.join(output, 'index.html'), renderShell({
   base, title: '笔记', canonical: siteUrl, body: home, escapeHtml
 }))
 for (const note of notes) {
   const directory = path.join(output, 'n', note.rel.slice(0, -3))
   fs.mkdirSync(directory, { recursive: true })
-  const body = note.body.replace(/^#\s+[^\n]+\n+/, '')
-  const env = { note, headings: [], headingIndex: 0 }
-  const html = md.render(expandWiki(body, note), env)
-  const article = renderArticle({ base, note, html, headings: env.headings, noteUrl, escapeHtml })
+  const { html, headings } = renderNote(note)
+  const article = renderArticle({ base, note, html, headings, notes, categories, noteUrl, escapeHtml })
   const canonical = siteUrl + 'n/' + encodedPath(note.rel.slice(0, -3)) + '/'
   fs.writeFileSync(path.join(directory, 'index.html'), renderShell({
     base, title: note.title, description: note.excerpt, canonical, body: article, escapeHtml
