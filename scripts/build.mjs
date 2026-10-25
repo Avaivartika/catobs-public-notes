@@ -51,10 +51,12 @@ function splitFrontmatter(content) {
 }
 function excerptFrom(body) {
   const paragraphs = body.split(/\n\s*\n/).map(part => part.trim())
-  const candidate = paragraphs.find(part => part && !/^(#{1,6}\s|!\[|>\s|[-*+]\s|\d+\.\s|```|\$\$)/.test(part)) || ''
-  return candidate.replace(/!\[[^\]]*\]\([^)]*\)/g, ' ').replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
-    .replace(/\[\[([^|\]]+)(?:\|([^\]]+))?\]\]/g, (_, title, label) => label || title)
-    .replace(/[*_`~]/g, '').replace(/\s+/g, ' ').trim().slice(0, 160)
+    .filter(part => part && !/^(#{1,6}\s|!\[|>\s|[-*+]\s|\d+\.\s|```|\$\$)/.test(part))
+    .map(part => part.replace(/!\[[^\]]*\]\([^)]*\)/g, ' ').replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+      .replace(/\[\[([^|\]]+)(?:\|([^\]]+))?\]\]/g, (_, title, label) => label || title)
+      .replace(/[*_`~]/g, '').replace(/\s+/g, ' ').trim())
+  const substantial = paragraphs.filter(part => part.length >= 25)
+  return (substantial.length ? substantial : paragraphs).slice(0, 2).join(' ').slice(0, 200)
 }
 const paths = walk(source)
 const markdownPaths = paths.filter(file => file.toLowerCase().endsWith('.md'))
