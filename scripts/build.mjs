@@ -1,4 +1,5 @@
 import fs from 'node:fs'
+import { createHash } from 'node:crypto'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import MarkdownIt from 'markdown-it'
@@ -9,6 +10,7 @@ import { renderShell, renderHome, renderArticle, renderPreview } from './layout.
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const source = path.join(root, 'notes')
 const output = path.join(root, 'dist')
+const styleVersion = createHash('sha256').update(fs.readFileSync(path.join(root, 'site', 'style.css'))).digest('hex').slice(0, 10)
 const base = (process.env.SITE_BASE || '/catobs-public-notes/').replace(/\/?$/, '/')
 const siteUrl = 'https://avaivartika.github.io' + base
 const md = new MarkdownIt({ html: false, linkify: true, typographer: true })
@@ -133,7 +135,7 @@ function renderNote(note) {
 const featured = notes.length ? renderNote(notes[0]) : { html: '', headings: [] }
 const home = renderHome({ base, notes, categories, noteUrl, escapeHtml, featuredHtml: featured.html, featuredHeadings: featured.headings })
 fs.writeFileSync(path.join(output, 'index.html'), renderShell({
-  base, title: '笔记', canonical: siteUrl, body: home, escapeHtml
+  base, title: '笔记', canonical: siteUrl, body: home, escapeHtml, styleVersion
 }))
 for (const note of notes) {
   const directory = path.join(output, 'n', note.rel.slice(0, -3))
@@ -142,7 +144,7 @@ for (const note of notes) {
   const article = renderArticle({ base, note, html, headings, notes, categories, noteUrl, escapeHtml })
   const canonical = siteUrl + 'n/' + encodedPath(note.rel.slice(0, -3)) + '/'
   fs.writeFileSync(path.join(directory, 'index.html'), renderShell({
-    base, title: note.title, description: note.excerpt, canonical, body: article, escapeHtml
+    base, title: note.title, description: note.excerpt, canonical, body: article, escapeHtml, styleVersion
   }))
 }
 fs.writeFileSync(path.join(output, 'search.json'), JSON.stringify(notes.map(note => ({ title: note.title, category: note.category, excerpt: note.excerpt, url: noteUrl(note) }))))

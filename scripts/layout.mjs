@@ -1,13 +1,13 @@
 const githubRepo = 'https://github.com/Avaivartika/catobs-public-notes'
 
-export function renderShell({ base, title, description, canonical, body, escapeHtml }) {
+export function renderShell({ base, title, description, canonical, body, escapeHtml, styleVersion }) {
   return '<!doctype html><html lang="zh-CN"><head>' +
     '<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">' +
     '<meta name="theme-color" content="#f6f5f0">' +
     '<meta name="description" content="' + escapeHtml(description || 'Catwarrior 的文章与笔记。') + '">' +
     '<title>' + escapeHtml(title) + ' · Catwarrior</title>' +
     '<link rel="canonical" href="' + canonical + '">' +
-    '<link rel="stylesheet" href="' + base + 'style.css">' +
+    '<link rel="stylesheet" href="' + base + 'style.css?v=' + styleVersion + '">' +
     '<link rel="stylesheet" href="' + base + 'katex.min.css">' +
     '<link rel="icon" href="' + base + 'favicon.svg" type="image/svg+xml">' +
     '</head><body>' +
