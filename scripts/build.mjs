@@ -121,6 +121,7 @@ for (const file of paths.filter(f => !f.toLowerCase().endsWith('.md'))) {
   fs.copyFileSync(file, dest)
 }
 for (const asset of ['style.css', 'app.js', 'favicon.svg']) fs.copyFileSync(path.join(root, 'site', asset), path.join(output, asset))
+fs.cpSync(path.join(root, 'site', 'webfonts'), path.join(output, 'webfonts'), { recursive: true })
 fs.copyFileSync(path.join(root, 'node_modules/katex/dist/katex.min.css'), path.join(output, 'katex.min.css'))
 fs.cpSync(path.join(root, 'node_modules/katex/dist/fonts'), path.join(output, 'fonts'), { recursive: true })
 fs.writeFileSync(path.join(output, '.nojekyll'), '')

@@ -1,3 +1,17 @@
+@font-face {
+  font-family: "Catobs Kai Fallback";
+  src: local("STKaitiSC-Regular"), local("Kaiti SC Regular"), url("webfonts/catobs-kai-fallback.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Catobs Kai Extended";
+  src: url("webfonts/catobs-kai-extended.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
 :root {
   --page: #f6f5f0;
   --paper: #fdfdfb;
@@ -5,7 +19,7 @@
   --muted: #6e746d;
   --line: #e0e2d9;
   --accent: #586e2b;
-  --font: "Times New Roman", "Kaiti SC", "PingFang SC", serif;
+  --font: "Times New Roman", "Kaiti SC", "STKaiti", "Catobs Kai Fallback", "Catobs Kai Extended", "PingFang SC", serif;
   --mono: Consolas, "Courier New", monospace;
 }
 * { box-sizing: border-box; }
