@@ -1,0 +1,13 @@
+{
+  "name": "catwarrior-public-notes",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "build": "node scripts/build.mjs"
+  },
+  "dependencies": {
+    "katex": "^0.16.25",
+    "markdown-it": "^14.1.0",
+    "markdown-it-texmath": "^1.0.0"
+  }
+}
