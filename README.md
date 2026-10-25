@@ -1,7 +1,7 @@
-# Catwarrior 的公开笔记
+# Catwarrior · 笔记
 
-**[打开笔记网站 →](https://avaivartika.github.io/catobs-public-notes/)**
+**[阅读文章 →](https://avaivartika.github.io/catobs-public-notes/)**
 
-这里展示我从 Obsidian 中主动选出的公开笔记。网站可以按文件夹浏览、搜索标题与内容，并直接阅读图文和公式。
+这里保存已发布的 Markdown 文章及其图片等附件。网页提供文章列表、分类和搜索。
 
-笔记原文件在 [notes](notes/) 目录，图片等附件会随笔记一起发布。新增的公开笔记由 Obsidian 插件同步到这里，GitHub Actions 随后自动更新网站。
+原文件位于 [notes](notes/) 目录。Obsidian 插件将标记的笔记同步到该目录后，GitHub Actions 自动更新网站。
