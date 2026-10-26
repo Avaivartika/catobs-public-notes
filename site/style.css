@@ -1,4 +1,18 @@
 @font-face {
+  font-family: "Catobs Fandol Kai Common";
+  src: url("webfonts/catobs-fandol-kai-common.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Catobs Fandol Kai Extended";
+  src: url("webfonts/catobs-fandol-kai-extended.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
   font-family: "Catobs Kai Fallback";
   src: local("STKaitiSC-Regular"), local("Kaiti SC Regular"), url("webfonts/catobs-kai-fallback.woff2") format("woff2");
   font-style: normal;
@@ -19,7 +33,7 @@
   --muted: #6e746d;
   --line: #e0e2d9;
   --accent: #586e2b;
-  --font: "Times New Roman", "Kaiti SC", "STKaiti", "Catobs Kai Fallback", "Catobs Kai Extended", "PingFang SC", serif;
+  --font: "Times New Roman", "Kaiti SC", "STKaiti", "KaiTi_GB2312", "Catobs Fandol Kai Common", "Catobs Fandol Kai Extended", "Catobs Kai Fallback", "Catobs Kai Extended", "PingFang SC", serif;
   --mono: Consolas, "Courier New", monospace;
 }
 * { box-sizing: border-box; }

@@ -13,9 +13,9 @@ export function renderShell({ base, title, description, canonical, body, escapeH
     '</head><body>' +
     '<header class="site-header"><div class="header-inner">' +
     '<a class="wordmark" href="' + base + '">Catwarrior<span class="wordmark-divider">/</span>笔记</a>' +
-    '<nav class="main-nav" aria-label="主导航"><a href="' + base + '">文章</a><a href="' + githubRepo + '">GitHub ↗</a></nav>' +
+    '<nav class="main-nav" aria-label="主导航"><a href="' + base + '">文章</a><a href="' + githubRepo + '">GitHub</a></nav>' +
     '</div></header>' + body +
-    '<footer class="site-footer"><span>Catwarrior · 笔记</span><a href="' + githubRepo + '">Markdown 源文件 ↗</a></footer>' +
+    '<footer class="site-footer"><span>Catwarrior · 笔记</span><a href="' + githubRepo + '">Markdown 源文件</a></footer>' +
     '<script src="' + base + 'app.js" defer></script></body></html>'
 }
 
@@ -44,8 +44,8 @@ function page({ base, note, html, headings, notes, categories, noteUrl, escapeHt
     '<article class="post"><header class="post-heading"><div class="post-kicker"><span>' + escapeHtml(note.category) + '</span><span class="kicker-rule"></span><span>笔记</span></div>' +
     '<h1>' + escapeHtml(note.title) + '</h1></header>' +
     '<div class="prose">' + html + '</div>' +
-    '<div class="post-links">' + (home ? '<a href="' + noteUrl(note) + '">文章独立链接 ↗</a>' : '<a href="' + base + '">← 返回首页</a>') +
-    '<a href="' + sourceUrl + '">查看 Markdown ↗</a></div></article>' + tocMarkup + '</main>'
+    '<div class="post-links">' + (home ? '<a href="' + noteUrl(note) + '">文章独立链接</a>' : '<a href="' + base + '">返回首页</a>') +
+    '<a href="' + sourceUrl + '">查看 Markdown</a></div></article>' + tocMarkup + '</main>'
 }
 
 export function renderHome(args) {
