@@ -1,4 +1,5 @@
 import fs from 'node:fs'
+import { execFileSync } from 'node:child_process'
 import { createHash } from 'node:crypto'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -69,7 +70,11 @@ const notes = markdownPaths.map(file => {
   const firstHeading = body.match(/^#\s+(.+)$/m)?.[1]
   const title = data.title || firstHeading || path.basename(rel, '.md')
   const category = rel.includes('/') ? rel.split('/')[0] : '未分类'
-  return { file, rel, body, title, category, excerpt: data.description || excerptFrom(body) }
+  let committedAt
+  try { committedAt = execFileSync('git', ['log', '-1', '--format=%cI', '--', file], { cwd: root, encoding: 'utf8' }).trim() } catch {}
+  const candidate = data.updated || data.date || committedAt
+  const date = candidate && Number.isFinite(Date.parse(candidate)) ? new Date(candidate).toISOString() : fs.statSync(file).mtime.toISOString()
+  return { file, rel, body, title, category, date, excerpt: data.description || excerptFrom(body) }
 }).sort((a, b) => a.title.localeCompare(b.title, 'zh-CN'))
 const noteByRel = new Map(notes.map(note => [note.rel.toLowerCase(), note]))
 const noteByTitle = new Map(notes.map(note => [note.title.toLowerCase(), note]))
@@ -156,3 +161,14 @@ const preview = renderPreview(notes, escapeHtml)
 fs.writeFileSync(path.join(output, 'notes-preview.svg'), preview)
 fs.writeFileSync(path.join(output, 'notes-overview.svg'), preview)
 console.log(`Built ${notes.length} notes in ${output}`)
+
+// Publish the index atomically with the article pages, so the blog never links to an unpublished build.
+fs.writeFileSync(path.join(output, 'index.json'), JSON.stringify({
+  version: 1,
+  generatedAt: new Date().toISOString(),
+  notes: notes.map(note => ({
+    title: note.title, description: note.excerpt, date: note.date,
+    href: 'https://avaivartika.github.io' + noteUrl(note),
+    tags: [note.category], kind: '笔记', path: 'notes'
+  })).sort((a, b) => Date.parse(b.date) - Date.parse(a.date))
+}, null, 2) + '\n')

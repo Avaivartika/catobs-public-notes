@@ -13,9 +13,9 @@ export function renderShell({ base, title, description, canonical, body, escapeH
     '</head><body>' +
     '<header class="site-header"><div class="header-inner">' +
     '<a class="wordmark" href="' + base + '">Catwarrior<span class="wordmark-divider">/</span>笔记</a>' +
-    '<nav class="main-nav" aria-label="主导航"><a href="' + base + '">文章</a><a href="' + githubRepo + '">GitHub</a></nav>' +
+    '<nav class="main-nav" aria-label="主导航"><a href="https://avaivartika.github.io/">返回博客 ↗</a><a href="' + base + '">文章</a><a href="' + githubRepo + '">GitHub</a></nav>' +
     '</div></header>' + body +
-    '<footer class="site-footer"><span>Catwarrior · 笔记</span><a href="' + githubRepo + '">Markdown 源文件</a></footer>' +
+    '<footer class="site-footer"><a href="https://avaivartika.github.io/">← 返回博客</a><a href="' + githubRepo + '">Markdown 源文件</a></footer>' +
     '<script src="' + base + 'app.js" defer></script></body></html>'
 }
 

@@ -120,3 +120,5 @@ button, input { font: inherit; }
 
 /* Match the blog’s restrained serif headings rather than synthetic bold Kai. */
 .post-heading h1, .prose h2, .prose h3, .prose h4, .wordmark { font-weight: 400; }
+
+@media (max-width: 420px) { .header-inner { gap: 10px; } .main-nav { gap: 12px; font-size: 13px; } .wordmark { font-size: 18px; } .wordmark-divider { padding: 0 5px; } }
