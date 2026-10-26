@@ -53,13 +53,16 @@ function splitFrontmatter(content) {
   return [data, content.slice(match[0].length)]
 }
 function excerptFrom(body) {
-  const paragraphs = body.split(/\n\s*\n/).map(part => part.trim())
-    .filter(part => part && !/^(#{1,6}\s|!\[|>\s|[-*+]\s|\d+\.\s|```|\$\$)/.test(part))
-    .map(part => part.replace(/!\[[^\]]*\]\([^)]*\)/g, ' ').replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
-      .replace(/\[\[([^|\]]+)(?:\|([^\]]+))?\]\]/g, (_, title, label) => label || title)
-      .replace(/[*_`~]/g, '').replace(/\s+/g, ' ').trim())
-  const substantial = paragraphs.filter(part => part.length >= 25)
-  return (substantial.length ? substantial : paragraphs).slice(0, 2).join(' ').slice(0, 200)
+  const clean = value => value.replace(/!?\[([^\]]*)\]\([^)]*\)/g, '$1').replace(/[`*_~]/g, '').replace(/\s+/g, ' ').trim()
+  const prose = body.replace(/```[\s\S]*?```/g, '').replace(/~~~[\s\S]*?~~~/g, '')
+  // Prefer an actual introduction before the first section, not commands inside a procedure.
+  const opening = prose.split(/^#{2,6}\s/m)[0].split(/\n\s*\n/).map(clean)
+    .find(part => part.length >= 16 && !/^(#|!|>|[-*+] |\d+\.)/.test(part) && !/https?:|127\.0\.0\.1/.test(part))
+  if (opening) return opening.length > 100 ? opening.slice(0, 97) + '…' : opening
+  const headings = [...prose.matchAll(/^#{2,6}\s+(.+)$/gm)].map(m => clean(m[1]).replace(/^\d+[.、)]\s*/, ''))
+    .filter(h => !/^(核心目标|目录|前情提要|参考|总结|附件|快速模板)/.test(h)).slice(0, 4)
+  if (headings.length) return `内容包括${headings.join('、')}。`.slice(0, 120)
+  return '查看笔记正文。'
 }
 const paths = walk(source)
 const markdownPaths = paths.filter(file => file.toLowerCase().endsWith('.md'))
@@ -71,8 +74,8 @@ const notes = markdownPaths.map(file => {
   const title = data.title || firstHeading || path.basename(rel, '.md')
   const category = rel.includes('/') ? rel.split('/')[0] : '未分类'
   let committedAt
-  try { committedAt = execFileSync('git', ['log', '-1', '--format=%cI', '--', file], { cwd: root, encoding: 'utf8' }).trim() } catch {}
-  const candidate = data.updated || data.date || committedAt
+  try { if (!data.created && !data.date) committedAt = execFileSync('git', ['log', '--follow', '--diff-filter=A', '--format=%aI', '--', file], { cwd: root, encoding: 'utf8' }).trim().split('\n').at(-1) } catch {}
+  const candidate = data.created || data.date || committedAt
   const date = candidate && Number.isFinite(Date.parse(candidate)) ? new Date(candidate).toISOString() : fs.statSync(file).mtime.toISOString()
   return { file, rel, body, title, category, date, excerpt: data.description || excerptFrom(body) }
 }).sort((a, b) => a.title.localeCompare(b.title, 'zh-CN'))
