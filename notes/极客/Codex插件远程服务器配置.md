@@ -1,3 +1,7 @@
+---
+created: "2026-03-20T12:08:51.007843Z"
+description: "通过 SSH 反向隧道配置远程 Codex 的代理、身份认证与 VS Code Remote-SSH 环境。"
+---
 
 ### 核心目标
 - 让远程主机通过 SSH `-R` 把所有 Codex 流量反向转回本地代理。
