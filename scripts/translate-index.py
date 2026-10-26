@@ -12,7 +12,7 @@ from urllib.request import urlopen
 ROOT = Path(__file__).resolve().parents[1]
 MODEL = 'Helsinki-NLP/opus-mt-zh-en'
 REVISION = 'cf109095479db38d6df799875e34039d4938aaa6'
-VERSION = 'opus-zh-en-v2'
+VERSION = 'opus-zh-en-v3'
 GLOSSARY = {'极客': 'Geek', '使用记录': 'Field notes', '研究': 'Research', '工具': 'Tools', '笔记': 'Notes'}
 
 def source_hash(note):
@@ -24,7 +24,7 @@ def translate_index(data, previous, translate):
     for note in data['notes']:
         key = source_hash(note)
         old = cached.get(note['href'], {})
-        if old.get('translationHash') == key and all(isinstance(old.get(k), str) and old[k] for k in ['titleEn', 'descriptionEn']) and isinstance(old.get('tagsEn'), list):
+        if old.get('translationHash') == key and all(isinstance(old.get(k), str) for k in ['titleEn', 'descriptionEn']) and isinstance(old.get('tagsEn'), list):
             for field in ['titleEn', 'descriptionEn', 'tagsEn']:
                 note[field] = old[field]
         else:
@@ -69,7 +69,7 @@ def main():
             if not re.search(r'[\u3400-\u9fff]', chunk):
                 result.append(chunk)
                 continue
-            urls = re.findall(r'https?://[^\s\u3000-\u303f\uff00-\uffef\u3400-\u9fff]+', chunk)
+            urls = re.findall(r'https?://[^\s\u3000-\u303f\uff00-\uffef\u3400-\u9fff]+|(?:\d{1,3}\.){3}\d{1,3}(?::\d+)?|socks5h://', chunk)
             masked = chunk
             for i, url in enumerate(urls):
                 masked = masked.replace(url, f'URL{i}', 1)
@@ -88,6 +88,9 @@ def main():
             for brand in ['Codex', 'GLaDOS', 'Obsidian', 'GitHub', 'SSH', 'VPN']:
                 if brand.lower() in chunk.lower():
                     translated = re.sub(rf'\b{brand}\b', brand, translated, flags=re.I)
+            if '代理' in chunk:
+                translated = re.sub(r'\bagents\b', 'proxies', translated, flags=re.I)
+                translated = re.sub(r'\bagent\b', 'proxy', translated, flags=re.I)
             result.append(translated)
         memo[value] = ' '.join(result).strip()
         return memo[value]
