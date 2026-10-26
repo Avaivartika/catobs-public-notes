@@ -64,10 +64,10 @@ export function renderPreview(notes, escapeHtml) {
     '<text x="856" y="' + (100 + index * 50) + '" text-anchor="end" font-size="16" fill="#72786c">' + escapeHtml(note.category) + '</text>' +
     '<line x1="34" x2="866" y1="' + (118 + index * 50) + '" y2="' + (118 + index * 50) + '" stroke="#e0e2d9"/>').join('') :
     '<text x="34" y="100" font-size="18" fill="#72786c">暂无文章</text>'
-  return '<svg xmlns="http://www.w3.org/2000/svg" font-family="Times New Roman, Kaiti SC, PingFang SC, serif" width="900" height="' + height + '" viewBox="0 0 900 ' + height + '" role="img" aria-label="公开笔记目录预览">' +
+  return '<svg xmlns="http://www.w3.org/2000/svg" font-family="Georgia, Noto Serif SC, Songti SC, STSong, serif" width="900" height="' + height + '" viewBox="0 0 900 ' + height + '" role="img" aria-label="公开笔记目录预览">' +
     '<rect x="1" y="1" width="898" height="' + (height - 2) + '" rx="7" fill="#fdfdfb" stroke="#e0e2d9"/>' +
     '<rect x="1" y="1" width="9" height="' + (height - 2) + '" fill="#76834c"/>' +
-    '<text x="34" y="47" font-size="26" font-weight="700" fill="#2d302b">Catwarrior / 笔记</text>' +
+    '<text x="34" y="47" font-size="26" font-weight="400" fill="#2d302b">Catwarrior / 笔记</text>' +
     '<text x="856" y="46" text-anchor="end" font-size="16" fill="#72786c">' + notes.length + ' 篇文章</text>' +
     '<line x1="34" x2="866" y1="65" y2="65" stroke="#e0e2d9"/>' + rows +
     '<text x="856" y="' + (height - 16) + '" text-anchor="end" font-size="16" fill="#586e2b">阅读笔记 →</text></svg>'

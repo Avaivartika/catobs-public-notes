@@ -1,31 +1,4 @@
-@font-face {
-  font-family: "Catobs Fandol Kai Common";
-  src: url("webfonts/catobs-fandol-kai-common.woff2") format("woff2");
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Catobs Fandol Kai Extended";
-  src: url("webfonts/catobs-fandol-kai-extended.woff2") format("woff2");
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Catobs Kai Fallback";
-  src: local("STKaitiSC-Regular"), local("Kaiti SC Regular"), url("webfonts/catobs-kai-fallback.woff2") format("woff2");
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Catobs Kai Extended";
-  src: url("webfonts/catobs-kai-extended.woff2") format("woff2");
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-}
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500&display=swap");
 :root {
   --page: #f6f5f0;
   --paper: #fdfdfb;
@@ -33,7 +6,7 @@
   --muted: #6e746d;
   --line: #e0e2d9;
   --accent: #586e2b;
-  --font: "Times New Roman", "Kaiti SC", "STKaiti", "KaiTi_GB2312", "Catobs Fandol Kai Common", "Catobs Fandol Kai Extended", "Catobs Kai Fallback", "Catobs Kai Extended", "PingFang SC", serif;
+  --font: Georgia, "Noto Serif SC", "Songti SC", "STSong", serif;
   --mono: Consolas, "Courier New", monospace;
 }
 * { box-sizing: border-box; }
@@ -44,13 +17,13 @@ button, input { font: inherit; }
 [hidden] { display: none !important; }
 .site-header { background: var(--paper); border-bottom: 1px solid var(--line); }
 .header-inner { width: min(1320px, calc(100% - 64px)); min-height: 70px; margin: auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
-.wordmark { font-size: 23px; font-weight: 700; white-space: nowrap; line-height: 1.2; }
+.wordmark { font-size: 23px; font-weight: 500; white-space: nowrap; line-height: 1.2; }
 .wordmark-divider { color: var(--accent); padding: 0 13px; font-weight: 400; }
 .main-nav { display: flex; gap: 30px; align-items: center; font-size: 16px; }
 .main-nav a:hover, .wordmark:hover { color: var(--accent); }
 .reading-layout { width: min(1320px, calc(100% - 64px)); min-height: calc(100vh - 140px); margin: 0 auto; display: grid; grid-template-columns: 232px minmax(0, 1fr) 172px; gap: clamp(28px, 4vw, 64px); align-items: start; }
 .directory { position: sticky; top: 0; padding: 39px 0 70px; min-width: 0; }
-.directory-heading { display: flex; justify-content: space-between; align-items: baseline; padding: 0 2px 16px; border-bottom: 1px solid var(--line); font-size: 19px; font-weight: 700; }
+.directory-heading { display: flex; justify-content: space-between; align-items: baseline; padding: 0 2px 16px; border-bottom: 1px solid var(--line); font-size: 19px; font-weight: 500; }
 .directory-heading span + span { font-size: 14px; font-weight: 400; color: var(--muted); }
 .search-field { height: 40px; display: flex; align-items: center; gap: 9px; margin: 21px 0 27px; padding: 0 11px; border: 1px solid #d6d9ce; border-radius: 4px; background: var(--paper); }
 .search-field:focus-within { outline: 2px solid #dbe3cc; border-color: var(--accent); }
@@ -62,24 +35,24 @@ button, input { font: inherit; }
 .directory-group ul { list-style: none; margin: 0; padding: 0; }
 .directory-entry a { display: block; padding: 10px 12px 10px 13px; margin-left: -13px; border-left: 2px solid transparent; font-size: 16px; line-height: 1.4; }
 .directory-entry a:hover { color: var(--accent); }
-.directory-entry a[aria-current] { border-left-color: var(--accent); background: #e9eddf; color: #415523; font-weight: 700; }
+.directory-entry a[aria-current] { border-left-color: var(--accent); background: #e9eddf; color: #415523; font-weight: 500; }
 .empty-state { color: var(--muted); font-size: 15px; }
 .mobile-directory { display: none; }
 .post { min-width: 0; min-height: calc(100vh - 140px); padding: 38px clamp(22px, 3vw, 48px) 72px; background: var(--paper); border-left: 1px solid var(--line); border-right: 1px solid var(--line); }
 .post-heading { padding: 0 0 24px; border-bottom: 1px solid var(--line); }
 .post-kicker { display: flex; align-items: center; gap: 11px; color: var(--accent); font-size: 15px; }
 .kicker-rule { width: 24px; height: 1px; background: #b6c09d; }
-.post-heading h1 { margin: 17px 0 0; font-size: clamp(32px, 3.2vw, 43px); line-height: 1.35; font-weight: 700; letter-spacing: .01em; }
+.post-heading h1 { margin: 17px 0 0; font-size: clamp(32px, 3.2vw, 43px); line-height: 1.35; font-weight: 500; letter-spacing: .01em; }
 .prose { padding-top: 29px; font-size: 18px; line-height: 1.9; overflow-wrap: anywhere; }
 .prose p { margin: 0 0 20px; }
-.prose h2, .prose h3, .prose h4 { line-height: 1.5; font-weight: 700; color: #262c24; }
+.prose h2, .prose h3, .prose h4 { line-height: 1.5; font-weight: 500; color: #262c24; }
 .prose h2 { margin: 0 0 17px; padding-left: 14px; border-left: 3px solid var(--accent); font-size: 26px; }
 .prose h2:not(:first-child) { margin-top: 44px; }
 .prose h3 { margin: 32px 0 12px; font-size: 22px; }
 .prose h4 { margin: 26px 0 10px; font-size: 19px; }
 .prose a { color: var(--accent); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
 .prose a:hover { color: #364c19; }
-.prose strong { font-weight: 700; }
+.prose strong { font-weight: 500; }
 .prose img { display: block; max-width: 100%; height: auto; margin: 23px auto 29px; border: 1px solid var(--line); border-radius: 3px; }
 .prose ul, .prose ol { margin: 16px 0 23px; padding-left: 1.5em; }
 .prose li { padding-left: .12em; margin: 7px 0; }
@@ -94,7 +67,7 @@ button, input { font: inherit; }
 .prose th { background: #f3f5ed; }
 .prose .katex-display { overflow-x: auto; overflow-y: hidden; padding: 8px 0; }
 .toc { position: sticky; top: 40px; padding: 44px 0 40px; font-size: 15px; min-width: 0; }
-.toc h2 { margin: 0 0 16px; font-size: 16px; font-weight: 700; }
+.toc h2 { margin: 0 0 16px; font-size: 16px; font-weight: 500; }
 .toc a { display: block; padding: 7px 0 7px 12px; border-left: 1px solid var(--line); color: var(--muted); line-height: 1.45; }
 .toc a:hover { border-left-color: var(--accent); color: var(--accent); }
 .toc-level-3 { padding-left: 24px !important; }
@@ -115,7 +88,7 @@ button, input { font: inherit; }
   .reading-layout { display: block; }
   .directory { display: none; }
   .mobile-directory { display: block; margin: 15px 0; border: 1px solid var(--line); border-radius: 4px; background: var(--paper); }
-  .mobile-directory summary { cursor: pointer; padding: 10px 14px; font-size: 16px; font-weight: 700; }
+  .mobile-directory summary { cursor: pointer; padding: 10px 14px; font-size: 16px; font-weight: 500; }
   .mobile-directory summary span { color: var(--muted); margin-left: 5px; font-size: 14px; font-weight: 400; }
   .mobile-directory .directory-content { padding: 0 16px 12px; }
   .mobile-directory .search-field { margin: 7px 0 18px; }
@@ -130,3 +103,6 @@ button, input { font: inherit; }
   .post { padding-left: 15px; padding-right: 15px; }
   .post-heading h1 { font-size: 29px; }
 }
+
+/* Match the blog’s restrained serif headings rather than synthetic bold Kai. */
+.post-heading h1, .prose h2, .prose h3, .prose h4, .wordmark { font-weight: 400; }

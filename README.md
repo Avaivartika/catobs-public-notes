@@ -2,7 +2,7 @@
 
 **[打开笔记网站，阅读完整文章 →](https://avaivartika.github.io/catobs-public-notes/)**
 
-<a href="https://avaivartika.github.io/catobs-public-notes/"><img src="assets/notes-site-preview-20261026.png" alt="笔记网站的实际页面预览，展示楷体排版、文章目录和正文" width="100%"></a>
+<a href="https://avaivartika.github.io/catobs-public-notes/"><img src="assets/notes-site-preview-20261026.png" alt="笔记网站的实际页面预览，展示文章目录和正文" width="100%"></a>
 
 这里保存已发布的 Markdown 文章及其图片等附件。网页提供文章列表、分类和搜索。
 
@@ -12,4 +12,4 @@
 
 原文件位于 [notes](notes/) 目录。Obsidian 插件将标记的笔记同步到该目录后，GitHub Actions 自动更新网站。
 
-网页优先使用设备上已有的楷体 SC；设备缺少该字体时，使用仓库内带有源文件及许可证的 Fandol Kai 网页字体。字体来源与生成方式见 [webfonts](site/webfonts/README.md)。
+网页字体与博客统一：英文使用 Georgia，中文使用 Noto Serif SC，后备为宋体 SC / STSong。标题采用常规字重，代码块保留等宽字体。
