@@ -12,7 +12,8 @@ from urllib.request import urlopen
 ROOT = Path(__file__).resolve().parents[1]
 MODEL = 'Helsinki-NLP/opus-mt-zh-en'
 REVISION = 'cf109095479db38d6df799875e34039d4938aaa6'
-VERSION = 'opus-zh-en-v1'
+VERSION = 'opus-zh-en-v2'
+GLOSSARY = {'极客': 'Geek', '使用记录': 'Field notes', '研究': 'Research', '工具': 'Tools', '笔记': 'Notes'}
 
 def source_hash(note):
     value = [VERSION, note['title'], note['description'], note['tags']]
@@ -46,6 +47,8 @@ def main():
     memo = {}
     def translate(value):
         nonlocal engine
+        if value in GLOSSARY:
+            return GLOSSARY[value]
         if not re.search(r'[\u3400-\u9fff]', value):
             return value
         if value in memo:
@@ -59,14 +62,18 @@ def main():
             model.eval()
             engine = (torch, tokenizer, model)
         torch, tokenizer, model = engine
-        # Keep URLs literal; the model should translate prose, not rewrite destinations.
-        chunks = re.split(r'(https?://[^\s\u3000-\u303f\uff00-\uffef\u3400-\u9fff]+)', value)
+        # Sentence-level generation prevents a long technical excerpt from losing its tail.
+        chunks = [part for part in re.split(r'(?<=[。！？])\s*', value) if part.strip()]
         result = []
         for chunk in chunks:
-            if not chunk or chunk.startswith(('http://', 'https://')) or not re.search(r'[\u3400-\u9fff]', chunk):
+            if not re.search(r'[\u3400-\u9fff]', chunk):
                 result.append(chunk)
                 continue
-            inputs = tokenizer(chunk, return_tensors='pt', truncation=False)
+            urls = re.findall(r'https?://[^\s\u3000-\u303f\uff00-\uffef\u3400-\u9fff]+', chunk)
+            masked = chunk
+            for i, url in enumerate(urls):
+                masked = masked.replace(url, f'URL{i}', 1)
+            inputs = tokenizer(masked, return_tensors='pt', truncation=False)
             if inputs['input_ids'].shape[1] > 480:
                 raise ValueError('Listing text exceeds translation context')
             with torch.inference_mode():
@@ -74,6 +81,13 @@ def main():
             translated = tokenizer.decode(output[0], skip_special_tokens=True).strip()
             if not translated:
                 raise ValueError('Empty translation')
+            for i, url in enumerate(urls):
+                translated, replacements = re.subn(rf'URL\s*{i}\b', lambda _: url, translated, flags=re.I)
+                if not replacements:
+                    raise ValueError('Translation lost a URL placeholder')
+            for brand in ['Codex', 'GLaDOS', 'Obsidian', 'GitHub', 'SSH', 'VPN']:
+                if brand.lower() in chunk.lower():
+                    translated = re.sub(rf'\b{brand}\b', brand, translated, flags=re.I)
             result.append(translated)
         memo[value] = ' '.join(result).strip()
         return memo[value]
