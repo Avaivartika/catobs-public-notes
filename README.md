@@ -12,4 +12,4 @@
 
 原文件位于 [notes](notes/) 目录。Obsidian 插件将标记的笔记同步到该目录后，GitHub Actions 自动更新网站。
 
-网页字体与博客统一：英文使用 Georgia，中文使用 Noto Serif SC，后备为宋体 SC / STSong。标题采用常规字重，代码块保留等宽字体。
+标题沿用博客的 Georgia / Noto Serif SC 衬线字体；正文使用 Arial / 苹方 / Noto Sans SC 无衬线字体，17px 字号配合宽松行距。代码块保留等宽字体。
