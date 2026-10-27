@@ -130,7 +130,7 @@ for (const file of paths.filter(f => !f.toLowerCase().endsWith('.md'))) {
   fs.mkdirSync(path.dirname(dest), { recursive: true })
   fs.copyFileSync(file, dest)
 }
-for (const asset of ['style.css', 'app.js', 'favicon.svg', 'ring-archive.webp', 'masthead-edge.svg']) fs.copyFileSync(path.join(root, 'site', asset), path.join(output, asset))
+for (const asset of ['style.css', 'app.js', 'favicon.svg', 'ring-archive.webp']) fs.copyFileSync(path.join(root, 'site', asset), path.join(output, asset))
 fs.mkdirSync(path.join(output, 'webfonts'), { recursive: true })
 for (const font of ['catobs-fandol-kai-common.woff2', 'catobs-fandol-kai-extended.woff2', 'FANDOL-COPYING.txt']) {
   fs.copyFileSync(path.join(root, 'site', 'webfonts', font), path.join(output, 'webfonts', font))

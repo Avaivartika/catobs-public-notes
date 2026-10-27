@@ -307,11 +307,11 @@ body:has(.reading-layout) { background: #e8e7e0; }
 .site-header a:hover { color: #dfbba0; }
 .site-header a:focus-visible { outline-color: #e8c4a8; }
 @media(max-width:600px) { .site-header { background-position: 64% 28%; } }
-/* The ring's sectional contour dissolves into the reading surface. */
-.site-header { position: relative; padding-bottom: 34px; background-position: center 28%; }
-.site-header .header-inner { border-bottom: 0; }
-.site-header::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 38px; background: url("masthead-edge.svg") center bottom / 100% 100% no-repeat; pointer-events: none; }
+/* Atmospheric transition: let the concrete disappear into the page tone. */
+.site-header { position: relative; padding-bottom: 66px; background-position: center 32%; }
+.site-header .header-inner { position: relative; z-index: 1; border-bottom: 0; }
+.site-header::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 76px; background: linear-gradient(to bottom, #e8e7e000 0%, #e8e7e01c 18%, #e8e7e068 42%, #e8e7e0cc 72%, #e8e7e0 100%); pointer-events: none; }
 @media(max-width:600px) {
-  .site-header { padding-bottom: 22px; background-position: 64% 28%; }
-  .site-header::after { height: 26px; background-size: 170% 100%; }
+  .site-header { padding-bottom: 45px; background-position: 64% 32%; }
+  .site-header::after { height: 52px; }
 }
