@@ -296,9 +296,9 @@ body:has(.reading-layout) { background: #e8e7e0; }
 /* A narrow architectural masthead shared with the main blog. */
 .site-header {
   background-color: #20231f;
-  background-image: linear-gradient(90deg, #101510b8, #10151080 50%, #101510b8), url("ring-archive.webp");
+  background-image: linear-gradient(90deg, #10151099, #10151026 50%, #10151099), url("horizon-archive.webp");
   background-size: cover;
-  background-position: center 26%;
+  background-position: center 50%;
   color: #f1f0e9;
 }
 .site-header .header-inner { border-bottom-color: #ffffff26; }
@@ -306,12 +306,12 @@ body:has(.reading-layout) { background: #e8e7e0; }
 .site-header .main-nav a,.site-header .wordmark { color: #f1f0e9; }
 .site-header a:hover { color: #dfbba0; }
 .site-header a:focus-visible { outline-color: #e8c4a8; }
-@media(max-width:600px) { .site-header { background-position: 64% 28%; } }
+@media(max-width:600px) { .site-header { background-position: center 50%; } }
 /* Atmospheric transition: let the concrete disappear into the page tone. */
-.site-header { position: relative; padding-bottom: 66px; background-position: center 32%; }
+.site-header { position: relative; padding-bottom: 66px; background-position: center 50%; }
 .site-header .header-inner { position: relative; z-index: 1; border-bottom: 0; }
 .site-header::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 76px; background: linear-gradient(to bottom, #e8e7e000 0%, #e8e7e01c 18%, #e8e7e068 42%, #e8e7e0cc 72%, #e8e7e0 100%); pointer-events: none; }
 @media(max-width:600px) {
-  .site-header { padding-bottom: 45px; background-position: 64% 32%; }
+  .site-header { padding-bottom: 45px; background-position: center 50%; }
   .site-header::after { height: 52px; }
 }
