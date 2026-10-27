@@ -296,7 +296,7 @@ body:has(.reading-layout) { background: #e8e7e0; }
 /* A narrow architectural masthead shared with the main blog. */
 .site-header {
   background-color: #20231f;
-  background-image: linear-gradient(90deg, #10151099, #10151026 50%, #10151099), url("horizon-archive.webp");
+  background-image: linear-gradient(90deg, #10151bba, #10151b40 50%, #10151bba), url("machine-window.webp");
   background-size: cover;
   background-position: center 50%;
   color: #f1f0e9;
