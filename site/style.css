@@ -292,3 +292,26 @@ body:has(.reading-layout) { background: #e8e7e0; }
   .main-nav { gap: 12px; }
   .wordmark { letter-spacing: .02em; }
 }
+
+/* A narrow architectural masthead shared with the main blog. */
+.site-header {
+  background-color: #20231f;
+  background-image: linear-gradient(90deg, #101510b8, #10151080 50%, #101510b8), url("ring-archive.webp");
+  background-size: cover;
+  background-position: center 26%;
+  color: #f1f0e9;
+}
+.site-header .header-inner { border-bottom-color: #ffffff26; }
+.site-header .wordmark svg { color: #d6ad90; --accent: #d6ad90; }
+.site-header .main-nav a,.site-header .wordmark { color: #f1f0e9; }
+.site-header a:hover { color: #dfbba0; }
+.site-header a:focus-visible { outline-color: #e8c4a8; }
+@media(max-width:600px) { .site-header { background-position: 64% 28%; } }
+/* The ring's sectional contour dissolves into the reading surface. */
+.site-header { position: relative; padding-bottom: 34px; background-position: center 28%; }
+.site-header .header-inner { border-bottom: 0; }
+.site-header::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 38px; background: url("masthead-edge.svg") center bottom / 100% 100% no-repeat; pointer-events: none; }
+@media(max-width:600px) {
+  .site-header { padding-bottom: 22px; background-position: 64% 28%; }
+  .site-header::after { height: 26px; background-size: 170% 100%; }
+}

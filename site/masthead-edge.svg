@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 48" preserveAspectRatio="none">
+  <path d="M0 12H120V18H250V25H360C570 25 640 44 820 44S1080 13 1290 13H1400V6H1500V0H1600V48H0Z" fill="#e8e7e0"/>
+  <path d="M0 23H110V29H240V36H355C555 36 650 47 820 47M1310 26H1410V19H1510V13H1600" fill="none" stroke="#8f5235" stroke-opacity=".16" stroke-width="1"/>
+</svg>
