@@ -109,3 +109,17 @@ if (sidebar && resizeHandle && sidebarToggle) {
     setWidth(event.key === 'Home' ? 200 : event.key === 'End' ? 440 : width + (event.key === 'ArrowRight' ? 20 : -20))
   })
 }
+
+// Warm the current page font after loading, then reuse it across future visits.
+if ('serviceWorker' in navigator) {
+  const script = document.currentScript;
+  const base = script ? new URL('.', script.src) : null;
+  window.addEventListener('load', async () => {
+    if (!base) return;
+    try {
+      await navigator.serviceWorker.register(new URL('font-cache.js', base), { scope: base.pathname });
+      const registration = await navigator.serviceWorker.ready;
+      registration.active?.postMessage({ type: 'cache-fonts', urls: Array.from(document.querySelectorAll('link[rel="preload"][as="font"]'), link => link.href) });
+    } catch { /* Font loading still works through the regular browser cache. */ }
+  }, { once: true });
+}
