@@ -20,16 +20,28 @@ export function renderShell({ base, title, description, canonical, body, escapeH
 }
 
 function directory(notes, categories, active, noteUrl, escapeHtml) {
-  const groups = categories.map(category => {
-    const links = notes.filter(note => note.category === category).map(note =>
-      '<li class="directory-entry" data-search="' + escapeHtml((category + ' ' + note.title).toLocaleLowerCase()) + '">' +
-      '<a' + (note.rel === active?.rel ? ' aria-current="page"' : '') + ' href="' + noteUrl(note) + '">' +
-      escapeHtml(note.title) + '</a></li>').join('')
-    return '<section class="directory-group"><h3>' + escapeHtml(category) + '</h3><ul>' + links + '</ul></section>'
-  }).join('')
+  const tree = { folders: new Map(), notes: [] }
+  for (const note of notes) {
+    let node = tree
+    const parts = note.rel.split('/').slice(0, -1)
+    for (const part of parts) {
+      if (!node.folders.has(part)) node.folders.set(part, { folders: new Map(), notes: [] })
+      node = node.folders.get(part)
+    }
+    node.notes.push(note)
+  }
+  const icon = '<svg class="file-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 2h7l4 4v12H5zM12 2v5h4M8 11h5M8 14h5"/></svg>'
+  function renderTree(node, prefix = '') {
+    const folders = [...node.folders].sort(([a], [b]) => a.localeCompare(b, 'zh-CN')).map(([name, child]) => {
+      const key = prefix + name + '/'
+      return `<details class="directory-group" data-folder="${escapeHtml(key)}" open><summary><span class="folder-chevron" aria-hidden="true">›</span><svg class="folder-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M2 5h6l2 2h8v10H2z"/></svg><span class="folder-name">${escapeHtml(name)}</span></summary><div class="folder-children">${renderTree(child, key)}</div></details>`
+    }).join('')
+    return folders + node.notes.map(note => `<div class="directory-entry" data-search="${escapeHtml((note.rel + ' ' + note.title).toLocaleLowerCase())}"><a ${note.rel === active?.rel ? 'aria-current="page"' : ''} href="${noteUrl(note)}" title="${escapeHtml(note.title)}">${icon}<span>${escapeHtml(note.title)}</span></a></div>`).join('')
+  }
+  const groups = renderTree(tree)
   return '<div class="directory-content"><label class="search-field"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>' +
     '<input class="search" type="search" placeholder="搜索文章" aria-label="搜索文章" autocomplete="off"></label>' +
-    '<div class="directory-groups">' + groups + '</div><p class="empty-state" hidden>没有找到匹配的文章。</p></div>'
+    '<div class="tree-tools"><button type="button" data-tree-action="expand">全部展开</button><button type="button" data-tree-action="collapse">全部折叠</button></div><nav class="directory-groups" aria-label="笔记文件树">' + groups + '</nav><p class="empty-state" hidden>没有找到匹配的文章。</p></div>'
 }
 
 function page({ base, note, html, headings, notes, categories, noteUrl, escapeHtml, home }) {
@@ -39,7 +51,7 @@ function page({ base, note, html, headings, notes, categories, noteUrl, escapeHt
   const sourceUrl = githubRepo + '/blob/main/notes/' + note.rel.split('/').map(encodeURIComponent).join('/')
   const dir = directory(notes, categories, note, noteUrl, escapeHtml)
   return '<main class="reading-layout">' +
-    '<aside class="directory" aria-label="文章目录"><div class="directory-heading"><span>目录</span><span>' + notes.length + ' 篇</span></div>' + dir + '</aside>' +
+    '<aside class="directory" id="note-sidebar" aria-label="文章目录"><div class="directory-heading"><span>笔记目录</span><button class="sidebar-toggle" type="button" aria-controls="sidebar-body" aria-expanded="true" title="收起侧栏" aria-label="收起侧栏">◧</button></div><div id="sidebar-body">' + dir + '</div><div class="sidebar-resizer" role="separator" tabindex="0" aria-label="调整目录宽度" aria-orientation="vertical" aria-valuemin="200" aria-valuemax="440" aria-valuenow="260"></div></aside>' +
     '<details class="mobile-directory"><summary>浏览文章 <span>' + notes.length + ' 篇</span></summary>' + dir + '</details>' +
     '<article class="post"><header class="post-heading"><div class="post-kicker"><span>' + escapeHtml(note.category) + '</span><span class="kicker-rule"></span><span>笔记</span></div>' +
     '<h1>' + escapeHtml(note.title) + '</h1></header>' +

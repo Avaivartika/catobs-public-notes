@@ -169,3 +169,37 @@ a:focus-visible,button:focus-visible { outline: 1px solid var(--accent); outline
 .post-heading h1 { font-family: var(--font); }
 @media(max-width: 900px) { .index-controls { flex-wrap: wrap; } .index-search { width: 100%; } .notes-home { width: calc(100% - 64px); } .note-row { grid-template-columns: 1fr 20px; gap: 12px; } .note-meta { grid-column: 1 / -1; flex-direction: row; gap: 20px; } }
 @media(max-width: 600px) { .header-inner,.site-footer { width: calc(100% - 40px); } .header-inner { min-height: 82px; gap: 15px; } .wordmark { font-size: 12px; gap: 8px; } .wordmark svg { width: 29px; height: 29px; } .main-nav { gap: 16px; font-size: 11px; } .main-nav a:last-child { display: none; } .notes-home { width: calc(100% - 40px); } .index-intro { padding: 64px 0 46px; } .index-intro h1 { font-size: 42px; } .index-layout { display: block; padding-bottom: 60px; } .index-aside { border: 0; padding: 0 0 20px; display: flex; justify-content: space-between; align-items: center; } .index-aside h2,.index-aside>a { display: none; } .index-main { padding: 0; } .note-row { padding: 28px 0; } .note-copy p { font-size: 13px; } }
+
+/* A collapsible file tree, with a quiet folder hierarchy and adjustable reading rail. */
+.reading-layout { --sidebar-width: 260px; grid-template-columns: var(--sidebar-width) minmax(0,1fr) 172px; gap: 28px; }
+.directory { top: 16px; padding: 24px 16px 30px 0; max-height: calc(100vh - 32px); border-right: 1px solid var(--line); }
+.directory-heading { font-size: 13px; padding-bottom: 14px; gap: 8px; }
+.sidebar-toggle { border: 0; background: transparent; color: var(--muted); cursor: pointer; font-size: 20px; padding: 2px 5px; }
+#sidebar-body { max-height: calc(100vh - 116px); overflow-y: auto; scrollbar-width: thin; }
+.tree-tools { display: flex; gap: 16px; margin: -12px 0 18px; }
+.tree-tools button { border: 0; background: none; color: var(--muted); font-size: 11px; padding: 4px 0; cursor: pointer; }
+.tree-tools button:hover { color: var(--accent); }
+.directory-group { margin: 0 0 8px; border: 1px solid var(--line); border-left: 2px solid var(--accent); border-radius: 3px; background: #ffffff18; padding: 5px; }
+.directory-group summary { display: flex; align-items: center; gap: 6px; padding: 7px 3px; cursor: pointer; list-style: none; color: var(--accent); font-size: 13px; font-weight: 500; }
+.directory-group summary::-webkit-details-marker { display: none; }
+.folder-chevron { width: 10px; flex: none; font-size: 17px; transition: transform .15s; }
+.directory-group[open] > summary .folder-chevron { transform: rotate(90deg); }
+.folder-icon,.file-icon { width: 16px; height: 16px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.3; stroke-linejoin: round; }
+.folder-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.folder-children { margin: 2px 0 2px 12px; padding-left: 7px; border-left: 1px solid var(--line); }
+.folder-children .directory-group { border: 0; background: transparent; padding: 0; margin: 0; }
+.directory-entry a { display: flex; align-items: center; gap: 7px; padding: 8px 5px; margin: 0; border: 0; font-size: 13px; line-height: 1.5; border-radius: 2px; }
+.directory-entry a span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.directory-entry .file-icon { color: var(--muted); opacity: .7; }
+.directory-entry a:hover { background: #222b2207; }
+.directory-entry a[aria-current] { box-shadow: inset 2px 0 var(--accent); background: #8f523513; font-weight: 400; }
+.directory-entry a[aria-current] .file-icon { color: var(--accent); opacity: 1; }
+.sidebar-resizer { position: absolute; top: 0; right: -5px; width: 10px; height: 100%; cursor: col-resize; touch-action: none; z-index: 2; }
+.sidebar-resizer:hover,.sidebar-resizer:focus-visible,.is-resizing .sidebar-resizer { background: #8f52352a; outline: none; }
+.is-resizing { user-select: none; cursor: col-resize; }
+.sidebar-collapsed { grid-template-columns: 36px minmax(0,1fr) 172px; }
+.sidebar-collapsed .directory { padding-right: 0; border-right: 0; }
+.sidebar-collapsed #sidebar-body,.sidebar-collapsed .directory-heading>span,.sidebar-collapsed .sidebar-resizer { display: none; }
+.sidebar-collapsed .directory-heading { border: 0; }
+@media(max-width:1150px) { .reading-layout { grid-template-columns: var(--sidebar-width) minmax(0,1fr); gap: 20px; } .sidebar-collapsed { grid-template-columns: 36px minmax(0,1fr); } }
+@media(max-width:700px) { .reading-layout,.sidebar-collapsed { display: block; } .mobile-directory .directory-content { padding: 0 12px 12px; } .mobile-directory .tree-tools { margin: 0 0 12px; } .directory-entry a { padding: 10px 5px; } }
