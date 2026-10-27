@@ -7,6 +7,7 @@ import json
 import os
 from pathlib import Path
 import re
+import unicodedata
 from urllib.request import urlopen
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -20,10 +21,10 @@ def source_hash(note):
     return hashlib.sha256(json.dumps(value, ensure_ascii=False).encode()).hexdigest()
 
 def translate_index(data, previous, translate):
-    cached = {n['href']: n for n in previous.get('notes', [])}
+    cached = {n.get('sourcePath', n.get('title')): n for n in previous.get('notes', [])}
     for note in data['notes']:
         key = source_hash(note)
-        old = cached.get(note['href'], {})
+        old = cached.get(note.get('sourcePath'), cached.get(note['title'], {}))
         if old.get('translationHash') == key and all(isinstance(old.get(k), str) for k in ['titleEn', 'descriptionEn']) and isinstance(old.get('tagsEn'), list):
             for field in ['titleEn', 'descriptionEn', 'tagsEn']:
                 note[field] = old[field]
@@ -32,11 +33,21 @@ def translate_index(data, previous, translate):
             note['descriptionEn'] = translate(note['description'])
             note['tagsEn'] = [translate(t) for t in note['tags']]
         note['translationHash'] = key
+    used = set()
+    for note in sorted(data['notes'], key=lambda n: n['sourcePath']):
+        title = unicodedata.normalize('NFKD', note['titleEn']).encode('ascii', 'ignore').decode().lower()
+        slug = re.sub(r'[^a-z0-9]+', '-', title).strip('-')[:80].rstrip('-')
+        if not slug:
+            raise ValueError(f"English title cannot form a URL: {note['titleEn']}")
+        if slug in used:
+            slug += '-' + hashlib.sha256(note['sourcePath'].encode()).hexdigest()[:8]
+        used.add(slug)
+        note['slug'] = slug
     data['translation'] = {'model': MODEL, 'revision': REVISION, 'license': 'CC-BY-4.0', 'version': VERSION}
     return data
 
 def main():
-    path = ROOT / 'dist/index.json'
+    path = ROOT / '.cache/listing.json'
     data = json.loads(path.read_text())
     try:
         with urlopen('https://avaivartika.github.io/catobs-public-notes/index.json', timeout=20) as response:

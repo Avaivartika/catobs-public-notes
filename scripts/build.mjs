@@ -83,7 +83,25 @@ const noteByRel = new Map(notes.map(note => [note.rel.toLowerCase(), note]))
 const noteByTitle = new Map(notes.map(note => [note.title.toLowerCase(), note]))
 const categories = [...new Set(notes.map(note => note.category))].sort((a, b) => a.localeCompare(b, 'zh-CN'))
 
-function noteUrl(note) { return base + 'n/' + encodedPath(note.rel.slice(0, -3)) + '/' }
+const metadataPath = path.join(root, '.cache', 'listing.json')
+if (process.argv.includes('--metadata')) {
+  fs.mkdirSync(path.dirname(metadataPath), { recursive: true })
+  fs.writeFileSync(metadataPath, JSON.stringify({ notes: notes.map(note => ({
+    sourcePath: note.rel, title: note.title, description: note.excerpt, date: note.date,
+    tags: [note.category], kind: '笔记', path: 'notes'
+  })) }, null, 2))
+  console.log(`Prepared metadata for ${notes.length} notes`)
+  process.exit(0)
+}
+const listing = JSON.parse(fs.readFileSync(metadataPath, 'utf8'))
+const listingBySource = new Map(listing.notes.map(note => [note.sourcePath, note]))
+for (const note of notes) {
+  const metadata = listingBySource.get(note.rel)
+  if (!metadata?.slug || metadata.title !== note.title || metadata.description !== note.excerpt)
+    throw new Error(`Missing or stale translated metadata: ${note.rel}. Run npm run build.`)
+  note.slug = metadata.slug
+}
+function noteUrl(note) { return base + 'n/' + note.slug + '/' }
 function resolveTarget(note, raw, image = false) {
   if (raw.startsWith(base)) return raw
   if (/^(https?:|data:|mailto:|#)/i.test(raw)) return raw
@@ -149,17 +167,17 @@ fs.writeFileSync(path.join(output, 'index.html'), renderShell({
   base, title: '笔记', canonical: siteUrl, body: home, escapeHtml, styleVersion
 }))
 for (const note of notes) {
-  const directory = path.join(output, 'n', note.rel.slice(0, -3))
+  const directory = path.join(output, 'n', note.slug)
   fs.mkdirSync(directory, { recursive: true })
   const { html, headings } = renderNote(note)
   const article = renderArticle({ base, note, html, headings, notes, categories, noteUrl, escapeHtml })
-  const canonical = siteUrl + 'n/' + encodedPath(note.rel.slice(0, -3)) + '/'
+  const canonical = 'https://avaivartika.github.io' + noteUrl(note)
   fs.writeFileSync(path.join(directory, 'index.html'), renderShell({
     base, title: note.title, description: note.excerpt, canonical, body: article, escapeHtml, styleVersion
   }))
 }
 fs.writeFileSync(path.join(output, 'search.json'), JSON.stringify(notes.map(note => ({ title: note.title, category: note.category, excerpt: note.excerpt, url: noteUrl(note) }))))
-fs.writeFileSync(path.join(output, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${[siteUrl, ...notes.map(n => siteUrl + 'n/' + encodedPath(n.rel.slice(0, -3)) + '/')].map(url => `<url><loc>${escapeHtml(url)}</loc></url>`).join('')}</urlset>`)
+fs.writeFileSync(path.join(output, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${[siteUrl, ...notes.map(n => 'https://avaivartika.github.io' + noteUrl(n))].map(url => `<url><loc>${escapeHtml(url)}</loc></url>`).join('')}</urlset>`)
 const preview = renderPreview(notes, escapeHtml)
 fs.writeFileSync(path.join(output, 'notes-preview.svg'), preview)
 fs.writeFileSync(path.join(output, 'notes-overview.svg'), preview)
@@ -167,10 +185,11 @@ console.log(`Built ${notes.length} notes in ${output}`)
 
 // Publish the index atomically with the article pages, so the blog never links to an unpublished build.
 fs.writeFileSync(path.join(output, 'index.json'), JSON.stringify({
-  version: 1,
+  version: 2,
+  translation: listing.translation,
   generatedAt: new Date().toISOString(),
   notes: notes.map(note => ({
-    title: note.title, description: note.excerpt, date: note.date,
+    ...listingBySource.get(note.rel),
     href: 'https://avaivartika.github.io' + noteUrl(note),
     tags: [note.category], kind: '笔记', path: 'notes'
   })).sort((a, b) => Date.parse(b.date) - Date.parse(a.date))

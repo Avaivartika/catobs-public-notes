@@ -8,7 +8,7 @@
 
 ## 文章
 
-- [GLaDOS 教育认证](https://avaivartika.github.io/catobs-public-notes/n/%E6%9E%81%E5%AE%A2/GLaDOS%20%E6%95%99%E8%82%B2%E8%AE%A4%E8%AF%81/)
+- [GLaDOS 教育认证](https://avaivartika.github.io/catobs-public-notes/n/glados-education-certification/)
 
 原文件位于 [notes](notes/) 目录。Obsidian 插件将标记的笔记同步到该目录后，GitHub Actions 自动更新网站。
 
@@ -18,7 +18,7 @@
 
 ## 自动维护中英文列表
 
-发布流程在构建后使用 Helsinki-NLP/opus-mt-zh-en（赫尔辛基大学，CC-BY-4.0）自动翻译标题、摘要与分类，写入 `index.json` 的 `titleEn`、`descriptionEn`、`tagsEn`。原始 Markdown 和正文 HTML 不变。只需继续发布中文笔记，无需填写英文 frontmatter。
+发布流程先提取笔记元数据，再使用 Helsinki-NLP/opus-mt-zh-en（赫尔辛基大学，CC-BY-4.0）自动翻译标题、摘要与分类，写入 `index.json` 的 `titleEn`、`descriptionEn`、`tagsEn`。原始 Markdown 和正文 HTML 不变。只需继续发布中文笔记，无需填写英文 frontmatter。
 
 翻译在 GitHub Actions CPU 上运行，不需要 API 密钥。按中文源内容的哈希复用上次已发布译文，修改后自动重译；模型权重也会缓存。翻译失败时部署停止，保留上一版完整站点，避免发布半份双语数据。首次下载模型会增加发布时间。机器翻译可能存在术语误译。
 
@@ -31,3 +31,11 @@
 首页采用与博客一致的灰米色、铜色标识与细线索引排版，按创建时间排列笔记。支持标题和简介搜索、分类筛选，以及 `⌘/Ctrl + K` 聚焦搜索；文章正文保留楷体阅读样式，页首与页尾可返回博客。
 
 文章侧栏按笔记路径生成可折叠的多层文件树，支持全部展开/折叠、搜索自动展开、当前文章定位。拖动侧栏右边界调整宽度，双击恢复默认宽度，或聚焦分隔线后用左右方向键调整；顶部按钮可整体收起侧栏。宽度与折叠状态保存在当前浏览器中。
+
+### 英文链接
+
+`npm run build` 依次提取元数据、自动翻译、生成网站。英文标题统一转换为小写连字符路径，例如 `GLaDOS Education Certification` → `/n/glados-education-certification/`。同名路径自动附加来源路径摘要以避免覆盖；无法生成有效英文路径时构建失败。
+
+目录、搜索、文章内链、canonical、sitemap 和博客索引共用该路径。中文目录和文件名只用于源笔记组织，不参与网页地址。修改英文标题会重新生成地址；不生成中文旧页面或跳转页。正文保持原文。
+
+本地构建需安装 `scripts/translation-requirements.txt` 中的依赖和 PyTorch；GitHub Actions 自动安装。`.cache/listing.json` 是本次构建的中间数据，不提交到仓库。

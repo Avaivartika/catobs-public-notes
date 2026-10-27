@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "build": "node scripts/build.mjs"
+    "build": "node scripts/build.mjs --metadata && python3 scripts/translate-index.py && node scripts/build.mjs"
   },
   "dependencies": {
     "katex": "^0.16.25",
