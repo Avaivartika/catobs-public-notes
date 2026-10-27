@@ -3,20 +3,20 @@ const githubRepo = 'https://github.com/Avaivartika/catobs-public-notes'
 export function renderShell({ base, title, description, canonical, body, escapeHtml, styleVersion }) {
   return '<!doctype html><html lang="zh-CN"><head>' +
     '<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">' +
-    '<meta name="theme-color" content="#f6f5f0">' +
-    '<meta name="description" content="' + escapeHtml(description || 'Catwarrior 的文章与笔记。') + '">' +
-    '<title>' + escapeHtml(title) + ' · Catwarrior</title>' +
+    '<meta name="theme-color" content="#e8e7e0">' +
+    '<meta name="description" content="' + escapeHtml(description || 'Avaivartika 的文章与笔记。') + '">' +
+    '<title>' + escapeHtml(title) + ' · Avaivartika</title>' +
     '<link rel="canonical" href="' + canonical + '">' +
     '<link rel="stylesheet" href="' + base + 'style.css?v=' + styleVersion + '">' +
     '<link rel="stylesheet" href="' + base + 'katex.min.css">' +
     '<link rel="icon" href="' + base + 'favicon.svg" type="image/svg+xml">' +
     '</head><body>' +
     '<header class="site-header"><div class="header-inner">' +
-    '<a class="wordmark" href="' + base + '">Catwarrior<span class="wordmark-divider">/</span>笔记</a>' +
-    '<nav class="main-nav" aria-label="主导航"><a href="https://avaivartika.github.io/">返回博客 ↗</a><a href="' + base + '">文章</a><a href="' + githubRepo + '">GitHub</a></nav>' +
+    '<a class="wordmark" href="https://avaivartika.github.io/" aria-label="Avaivartika 博客首页"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true" focusable="false">    <path d="M6 39V9H31V15H12V39Z" fill="currentColor" />  <path d="M21 39V22H27V33H36V39Z" fill="currentColor" />  <path d="M35 9L40 14L35 19L30 14Z" fill="var(--accent, #be9276)" />  <path d="M6 44H16M21 44H36M41 24V34" stroke="currentColor" stroke-width="1.5" opacity=".55" /></svg><span>Avaivartika</span></a>' +
+    '<nav class="main-nav" aria-label="主导航"><a href="https://avaivartika.github.io/">博客首页 ↗</a><a aria-current="page" href="' + base + '">笔记</a><a href="' + githubRepo + '">GitHub</a></nav>' +
     '</div></header>' + body +
     '<footer class="site-footer"><a href="https://avaivartika.github.io/">← 返回博客</a><a href="' + githubRepo + '">Markdown 源文件</a></footer>' +
-    '<script src="' + base + 'app.js" defer></script></body></html>'
+    '<script src="' + base + 'app.js?v=' + styleVersion + '" defer></script></body></html>'
 }
 
 function directory(notes, categories, active, noteUrl, escapeHtml) {
@@ -48,9 +48,13 @@ function page({ base, note, html, headings, notes, categories, noteUrl, escapeHt
     '<a href="' + sourceUrl + '">查看 Markdown</a></div></article>' + tocMarkup + '</main>'
 }
 
-export function renderHome(args) {
-  if (!args.notes.length) return '<main class="no-notes"><h1>笔记</h1><p>暂无公开文章。</p></main>'
-  return page({ ...args, note: args.notes[0], html: args.featuredHtml, headings: args.featuredHeadings, home: true })
+export function renderHome({ notes, categories, noteUrl, escapeHtml }) {
+  const sorted = [...notes].sort((a, b) => Date.parse(b.date) - Date.parse(a.date))
+  const rows = sorted.map(note => {
+    const date = new Intl.DateTimeFormat('zh-CN', { timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(note.date))
+    return `<a class="note-row" data-category="${escapeHtml(note.category)}" data-search="${escapeHtml((note.title + ' ' + note.excerpt + ' ' + note.category).toLocaleLowerCase())}" href="${noteUrl(note)}"><div class="note-meta"><time datetime="${note.date}">${date}</time><span>${escapeHtml(note.category)}</span></div><div class="note-copy"><h2>${escapeHtml(note.title)}</h2><p>${escapeHtml(note.excerpt)}</p></div><span class="note-arrow" aria-hidden="true">↗</span></a>`
+  }).join('')
+  return `<main class="notes-home" id="main"><header class="index-intro"><span class="eyebrow">NOTES / 笔记</span><h1>思考与记录</h1><p>从 Obsidian 选择发布的笔记。</p></header><section class="index-layout" aria-label="笔记索引"><aside class="index-aside"><span class="eyebrow">01 — 目录</span><h2>笔记</h2><p><span id="note-count">${notes.length}</span> 篇记录</p><a href="https://avaivartika.github.io/">返回博客 ↗</a></aside><div class="index-main"><div class="index-controls"><div class="category-filters" aria-label="按分类筛选"><button type="button" data-category-filter="" aria-pressed="true">全部</button>${categories.map(c => `<button type="button" data-category-filter="${escapeHtml(c)}" aria-pressed="false">${escapeHtml(c)}</button>`).join('')}</div><label class="index-search"><span aria-hidden="true">⌕</span><input id="note-search" type="search" aria-label="搜索笔记" placeholder="搜索笔记" autocomplete="off"><kbd>⌘ K</kbd></label></div><div class="note-list">${rows}</div><p class="index-empty" hidden>没有找到匹配的笔记，请换个关键词。</p></div></section></main>`
 }
 
 export function renderArticle(args) { return page({ ...args, home: false }) }
