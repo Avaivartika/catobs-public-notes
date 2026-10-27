@@ -245,3 +245,50 @@ body:has(.reading-layout) { background: #e8e7e0; }
 @media(max-width:1350px) { .reading-layout { grid-template-columns: var(--sidebar-width) minmax(0,1fr); gap: 32px; } .reading-layout .toc { display: none; } .sidebar-collapsed { grid-template-columns: 36px minmax(0,1fr); } }
 @media(max-width:900px) { .reading-layout { width: calc(100% - 48px); gap: 20px; } .post { padding-left: 12px; padding-right: 0; } }
 @media(max-width:700px) { .reading-layout,.sidebar-collapsed { width: calc(100% - 40px); display: block; } .mobile-directory { border: 0; border-bottom: 1px solid var(--line); background: transparent; border-radius: 0; margin: 16px 0 0; } .mobile-directory summary { font-family: var(--reading); } .post { padding: 30px 0 64px; border: 0; } .post-heading h1 { font-size: 32px; } .prose { font-size: 18px; padding-top: 30px; } }
+
+/* Stronger reading contrast and a compact, touch-friendly mobile directory. */
+:root { --muted: #50584e; }
+.reading-layout { color: #252a25; }
+.directory-group summary,.toc a,.post-kicker,.tree-tools button { color: #50554b; }
+.directory-entry a { color: #30352d; }
+.directory-entry .file-icon,.folder-icon { opacity: 1; color: #62695d; }
+.directory-entry a[aria-current] { color: #774329; background: #8f523518; }
+.search-field input::placeholder,.index-search input::placeholder { color: #60665b; opacity: 1; }
+.prose { color: #252a25; }
+.post-heading h1 { overflow-wrap: anywhere; text-wrap: balance; }
+@media(max-width:900px) {
+  .reading-layout,.sidebar-collapsed { display: block; width: calc(100% - 40px); }
+  .reading-layout .directory { display: none; }
+  .mobile-directory { display: block; position: sticky; top: 0; z-index: 10; background: #e8e7e0; border: 0; border-bottom: 1px solid #292e2938; border-radius: 0; margin: 12px 0 0; }
+  .mobile-directory > summary { min-height: 48px; display: flex; align-items: center; justify-content: space-between; list-style: none; cursor: pointer; padding: 10px 2px; font: 17px/1.5 var(--reading); color: #30352d; }
+  .mobile-directory > summary::-webkit-details-marker { display: none; }
+  .mobile-directory > summary::after { content: '⌄'; margin-left: 12px; }
+  .mobile-directory[open] > summary::after { content: '⌃'; }
+  .mobile-directory > summary > span { margin-right: auto; margin-left: 12px; font-size: 14px; color: #50554b; }
+  .mobile-directory .directory-content { max-height: min(60dvh,480px); overflow-y: auto; overscroll-behavior: contain; padding: 0 4px 12px; }
+  .mobile-directory .search-field { height: 44px; margin: 4px 0 8px; padding: 0 8px; }
+  .mobile-directory input { font-size: 16px; }
+  .mobile-directory .tree-tools { margin: 0 0 12px; }
+  .mobile-directory .tree-tools button { min-height: 44px; padding: 8px; font-size: 15px; }
+  .mobile-directory .directory-group summary { min-height: 44px; justify-content: flex-start; padding: 8px 2px; font: 16px/1.5 var(--reading); }
+  .mobile-directory .directory-group summary span { margin: 0; font-size: inherit; color: inherit; }
+  .mobile-directory .directory-entry a { min-height: 44px; font-size: 17px; padding: 10px 8px; }
+  .mobile-directory .directory-entry a span { white-space: normal; overflow-wrap: anywhere; }
+  .post { max-width: 720px; margin: auto; padding: 28px 0 64px; border: 0; }
+  .post-heading { padding-bottom: 24px; }
+  .post-heading h1 { font-size: clamp(27px,6.5vw,36px); line-height: 1.5; margin-top: 16px; }
+  .prose { font-size: 18px; line-height: 1.85; padding-top: 28px; }
+  .prose h2 { font-size: 24px; }
+  .prose h3 { font-size: 21px; }
+  .prose pre { max-width: 100%; padding: 14px; font-size: 13px; overflow-wrap: normal; }
+  .prose pre code { white-space: pre; }
+  .prose table { font-size: 16px; }
+  .prose ul,.prose ol { padding-left: 1.25em; }
+  .post-links a { min-height: 44px; display: inline-flex; align-items: center; }
+}
+@media(max-width:360px) {
+  .reading-layout,.sidebar-collapsed,.header-inner,.site-footer { width: calc(100% - 32px); }
+  .header-inner { gap: 8px; }
+  .main-nav { gap: 12px; }
+  .wordmark { letter-spacing: .02em; }
+}
