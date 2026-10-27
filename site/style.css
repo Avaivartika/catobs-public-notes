@@ -179,8 +179,8 @@ a:focus-visible,button:focus-visible { outline: 1px solid var(--accent); outline
 .tree-tools { display: flex; gap: 16px; margin: -12px 0 18px; }
 .tree-tools button { border: 0; background: none; color: var(--muted); font-size: 11px; padding: 4px 0; cursor: pointer; }
 .tree-tools button:hover { color: var(--accent); }
-.directory-group { margin: 0 0 8px; border: 1px solid var(--line); border-left: 2px solid var(--accent); border-radius: 3px; background: #ffffff18; padding: 5px; }
-.directory-group summary { display: flex; align-items: center; gap: 6px; padding: 7px 3px; cursor: pointer; list-style: none; color: var(--accent); font-size: 13px; font-weight: 500; }
+.directory-group { margin: 0 0 22px; border: 0; background: transparent; padding: 0; }
+.directory-group summary { display: flex; align-items: center; gap: 6px; padding: 7px 3px; cursor: pointer; list-style: none; color: var(--muted); font-size: 15px; font-weight: 400; }
 .directory-group summary::-webkit-details-marker { display: none; }
 .folder-chevron { width: 10px; flex: none; font-size: 17px; transition: transform .15s; }
 .directory-group[open] > summary .folder-chevron { transform: rotate(90deg); }
@@ -188,7 +188,7 @@ a:focus-visible,button:focus-visible { outline: 1px solid var(--accent); outline
 .folder-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .folder-children { margin: 2px 0 2px 12px; padding-left: 7px; border-left: 1px solid var(--line); }
 .folder-children .directory-group { border: 0; background: transparent; padding: 0; margin: 0; }
-.directory-entry a { display: flex; align-items: center; gap: 7px; padding: 8px 5px; margin: 0; border: 0; font-size: 13px; line-height: 1.5; border-radius: 2px; }
+.directory-entry a { display: flex; align-items: center; gap: 7px; padding: 9px 8px; margin: 0; border: 0; font-size: 16px; line-height: 1.5; border-radius: 2px; }
 .directory-entry a span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .directory-entry .file-icon { color: var(--muted); opacity: .7; }
 .directory-entry a:hover { background: #222b2207; }
@@ -203,3 +203,45 @@ a:focus-visible,button:focus-visible { outline: 1px solid var(--accent); outline
 .sidebar-collapsed .directory-heading { border: 0; }
 @media(max-width:1150px) { .reading-layout { grid-template-columns: var(--sidebar-width) minmax(0,1fr); gap: 20px; } .sidebar-collapsed { grid-template-columns: 36px minmax(0,1fr); } }
 @media(max-width:700px) { .reading-layout,.sidebar-collapsed { display: block; } .mobile-directory .directory-content { padding: 0 12px 12px; } .mobile-directory .tree-tools { margin: 0 0 12px; } .directory-entry a { padding: 10px 5px; } }
+
+/* Reading typography: one Kai/Times family throughout the reading surface. */
+body:has(.reading-layout) { background: #e8e7e0; }
+.reading-layout { width: min(1540px, calc(100% - 112px)); gap: 38px; grid-template-columns: var(--sidebar-width) minmax(0,1fr) 156px; font-family: var(--reading); }
+.reading-layout button,.reading-layout input { font-family: var(--reading); }
+.directory { padding: 38px 20px 30px 0; border-right-color: #292e2918; }
+.directory-heading { font-family: var(--reading); font-size: 17px; border: 0; padding: 0 0 6px; color: var(--ink); }
+.search-field { margin: 16px 0 20px; height: 36px; border: 0; border-bottom: 1px solid var(--line); padding: 0 3px; }
+.search-field input { font-size: 15px; }
+.search-field:focus-within { outline: 0; border-bottom-color: var(--accent); }
+.tree-tools { margin: 0 0 26px; gap: 20px; }
+.tree-tools button { font-size: 13px; }
+.folder-children { border-left-color: #292e2919; margin-left: 11px; padding-left: 10px; }
+.directory-group summary { gap: 8px; padding: 6px 2px; }
+.directory-entry a { gap: 8px; }
+.directory-entry a[aria-current] { background: #8f52350c; box-shadow: inset 2px 0 #8f52358c; }
+.directory-entry .file-icon { width: 14px; height: 14px; opacity: .48; }
+.folder-icon { width: 15px; height: 15px; opacity: .65; }
+.post { width: 100%; max-width: 760px; justify-self: center; padding: 46px 24px 100px; }
+.post-heading { border-bottom: 1px solid #292e2920; padding-bottom: 30px; }
+.post-kicker { font-family: var(--reading); color: var(--muted); font-size: 15px; gap: 12px; }
+.kicker-rule { background: var(--line); width: 18px; }
+.post-heading h1 { font-family: var(--reading); font-size: clamp(30px,3vw,40px); line-height: 1.5; letter-spacing: 0; margin-top: 21px; font-weight: 400; }
+.prose { font-size: 19px; line-height: 1.95; padding-top: 40px; color: #30332e; }
+.prose p { margin-bottom: 24px; }
+.prose h2 { font-size: 26px; padding: 0; border: 0; margin-bottom: 18px; line-height: 1.6; }
+.prose h2:not(:first-child) { margin-top: 48px; }
+.prose h3 { font-size: 22px; margin-top: 32px; }
+.prose strong { font-weight: 600; }
+.prose img { border: 0; border-radius: 2px; margin: 28px auto; }
+.prose blockquote { background: #292e2905; border-left: 2px solid #8f523565; padding: 12px 20px; color: var(--muted); }
+.prose blockquote p:last-child { margin-bottom: 0; }
+.prose pre { background: #deded64d; border: 1px solid #292e2914; border-radius: 3px; padding: 20px; font-size: 13px; }
+.prose code { background: #292e2908; }
+.toc { padding-top: 48px; font-family: var(--reading); font-size: 15px; }
+.toc h2 { font: 16px var(--reading); color: var(--muted); margin-bottom: 20px; }
+.toc a { padding-top: 8px; padding-bottom: 8px; line-height: 1.6; border-color: #292e2918; }
+.post-links { font-family: var(--reading); font-size: 15px; }
+.sidebar-collapsed { grid-template-columns: 36px minmax(0,1fr) 156px; }
+@media(max-width:1350px) { .reading-layout { grid-template-columns: var(--sidebar-width) minmax(0,1fr); gap: 32px; } .reading-layout .toc { display: none; } .sidebar-collapsed { grid-template-columns: 36px minmax(0,1fr); } }
+@media(max-width:900px) { .reading-layout { width: calc(100% - 48px); gap: 20px; } .post { padding-left: 12px; padding-right: 0; } }
+@media(max-width:700px) { .reading-layout,.sidebar-collapsed { width: calc(100% - 40px); display: block; } .mobile-directory { border: 0; border-bottom: 1px solid var(--line); background: transparent; border-radius: 0; margin: 16px 0 0; } .mobile-directory summary { font-family: var(--reading); } .post { padding: 30px 0 64px; border: 0; } .post-heading h1 { font-size: 32px; } .prose { font-size: 18px; padding-top: 30px; } }
